@@ -106,5 +106,34 @@ namespace My_Login_App.API.Packages
             return cards;
         }
 
+        public CardResponse get_card_by_id(int id)
+        {
+            OracleConnection conn = new OracleConnection();
+            conn.ConnectionString = ConnStr;
+
+            conn.Open();
+
+            OracleCommand cmd = conn.CreateCommand();
+            cmd.Connection = conn;
+            cmd.CommandText = "olerning.PKG_IURI_CARDS.get_card_by_id";
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            cmd.Parameters.Add("v_id", OracleDbType.Int32).Value = id;
+            cmd.Parameters.Add("v_result", OracleDbType.RefCursor).Direction = ParameterDirection.Output;
+
+            OracleDataReader reader = cmd.ExecuteReader();
+            reader.Read();
+            CardResponse card = new CardResponse()
+            {
+                Id = int.Parse(reader["id"].ToString()),
+                Title = reader["title"].ToString(),
+                Description = reader["description"].ToString(),
+                Author = reader["author"].ToString(),
+                CreateDate = reader["createdate"].ToString(),
+                Status = reader["status"].ToString()
+            };
+
+            return card;
+        }
     }
 }

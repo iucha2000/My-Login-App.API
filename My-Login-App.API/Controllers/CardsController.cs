@@ -45,5 +45,14 @@ namespace My_Login_App.API.Controllers
             return Ok(cards);
         }
 
+        [HttpGet("Get-Card-By-Id/{id}")]
+        public IActionResult GetCardById(int id)
+        {
+            PKG_CARDS cardPKG = new PKG_CARDS();
+            CardResponse card = cardPKG.get_card_by_id(id);
+
+            return Ok(card);
+        }
+
     }
 }
