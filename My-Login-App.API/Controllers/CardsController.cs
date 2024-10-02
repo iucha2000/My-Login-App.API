@@ -18,7 +18,7 @@ namespace My_Login_App.API.Controllers
             return Ok();
         }
 
-        [HttpPut("Edit-Card")]
+        [HttpPut("Edit-Card/{id}")]
         public IActionResult EditCard(int id, CardRequest card)
         {
             PKG_CARDS cardPKG = new PKG_CARDS();
