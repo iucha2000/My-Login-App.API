@@ -108,6 +108,7 @@ namespace My_Login_App.API.Packages
 
         public CardResponse get_card_by_id(int id)
         {
+            CardResponse card = null;
             OracleConnection conn = new OracleConnection();
             conn.ConnectionString = ConnStr;
 
@@ -123,15 +124,20 @@ namespace My_Login_App.API.Packages
 
             OracleDataReader reader = cmd.ExecuteReader();
             reader.Read();
-            CardResponse card = new CardResponse()
+            if (reader.HasRows)
             {
-                Id = int.Parse(reader["id"].ToString()),
-                Title = reader["title"].ToString(),
-                Description = reader["description"].ToString(),
-                Author = reader["author"].ToString(),
-                CreateDate = reader["createdate"].ToString(),
-                Status = reader["status"].ToString()
-            };
+                card = new CardResponse()
+                {
+                    Id = int.Parse(reader["id"].ToString()),
+                    Title = reader["title"].ToString(),
+                    Description = reader["description"].ToString(),
+                    Author = reader["author"].ToString(),
+                    CreateDate = reader["createdate"].ToString(),
+                    Status = reader["status"].ToString()
+                };
+            }
+
+            conn.Close();
 
             return card;
         }
