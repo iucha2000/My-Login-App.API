@@ -10,7 +10,7 @@ namespace My_Login_App.API.Controllers
     public class UsersController : ControllerBase
     {
         [HttpPost("Add-User")]
-        public IActionResult AddCard(User user)
+        public IActionResult AddUser(User user)
         {
             PKG_USERS userPKG = new PKG_USERS();
             userPKG.AddUser(user);
@@ -19,7 +19,7 @@ namespace My_Login_App.API.Controllers
         }
 
         [HttpGet("Get-User-By-Username/{username}")]
-        public IActionResult GetCardById(string username)
+        public IActionResult GetUserByUsername(string username)
         {
             PKG_USERS userPKG = new PKG_USERS();
             User user = userPKG.GetUser(username);

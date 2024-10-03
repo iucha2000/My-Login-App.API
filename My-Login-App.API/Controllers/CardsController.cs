@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using My_Login_App.API.Models;
 using My_Login_App.API.Packages;
 
@@ -9,6 +10,7 @@ namespace My_Login_App.API.Controllers
     [ApiController]
     public class CardsController : ControllerBase
     {
+        [Authorize]
         [HttpPost("Add-Card")]
         public IActionResult AddCard(CardRequest card)
         {
@@ -18,6 +20,7 @@ namespace My_Login_App.API.Controllers
             return Ok();
         }
 
+        [Authorize]
         [HttpPut("Edit-Card/{id}")]
         public IActionResult EditCard(int id, CardRequest card)
         {
@@ -27,6 +30,7 @@ namespace My_Login_App.API.Controllers
             return Ok();
         }
 
+        [Authorize]
         [HttpDelete("Delete-Card/{id}")]
         public IActionResult DeleteCard(int id)
         {
@@ -36,6 +40,7 @@ namespace My_Login_App.API.Controllers
             return Ok();
         }
 
+        [Authorize]
         [HttpGet("Get-All-Cards")]
         public IActionResult GetCards()
         {
@@ -45,6 +50,7 @@ namespace My_Login_App.API.Controllers
             return Ok(cards);
         }
 
+        [Authorize]
         [HttpGet("Get-Card-By-Id/{id}")]
         public IActionResult GetCardById(int id)
         {
