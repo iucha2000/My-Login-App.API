@@ -27,7 +27,7 @@ namespace My_Login_App.API.Controllers
                 var token = jwtManager.GetToken(user);
                 return Ok(token);
             }
-            return Unauthorized("Invalid credentials");
+            return Unauthorized(new { message = "Invalid credentials" });
         }
     }
 }
