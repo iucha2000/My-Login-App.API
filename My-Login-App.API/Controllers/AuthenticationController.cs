@@ -24,7 +24,7 @@ namespace My_Login_App.API.Controllers
             User existingUser = userPKG.GetUser(user.Username);
             if (existingUser != null && existingUser.Password == user.Password)
             {
-                var token = jwtManager.GetToken(user);
+                var token = jwtManager.GetToken(existingUser);
                 return Ok(token);
             }
             return Unauthorized(new { message = "Invalid credentials" });

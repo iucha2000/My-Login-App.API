@@ -1,4 +1,5 @@
-﻿using My_Login_App.API.Models;
+﻿using My_Login_App.API.Enums;
+using My_Login_App.API.Models;
 using Oracle.ManagedDataAccess.Client;
 using System.Data;
 
@@ -21,6 +22,7 @@ namespace My_Login_App.API.Packages
             cmd.Parameters.Add("v_email", OracleDbType.Varchar2).Value = user.Email;
             cmd.Parameters.Add("v_username", OracleDbType.Varchar2).Value = user.Username;
             cmd.Parameters.Add("v_password", OracleDbType.Varchar2).Value = user.Password;
+            cmd.Parameters.Add("v_role", OracleDbType.Int32).Value = user.Role;
 
             cmd.ExecuteNonQuery();
 
@@ -52,7 +54,8 @@ namespace My_Login_App.API.Packages
 
                     Email = reader["email"].ToString(),
                     Username = reader["username"].ToString(),
-                    Password = reader["password"].ToString()
+                    Password = reader["password"].ToString(),
+                    Role = (Role)int.Parse(reader["role"].ToString()),
                 };
             }
 
