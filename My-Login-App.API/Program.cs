@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using My_Login_App.API.Auth;
+using My_Login_App.API.Middlewares;
 using System.Text;
 
 namespace My_Login_App.API
@@ -79,6 +80,8 @@ namespace My_Login_App.API
             });
 
             var app = builder.Build();
+
+            app.UseMiddleware<ExceptionMiddleware>();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
