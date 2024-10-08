@@ -18,7 +18,6 @@ namespace My_Login_App.API.Controllers
             _usersRepo = usersRepo;
         }
 
-        [Authorize(Roles = "Admin")]
         [HttpPost("Add-User")]
         public IActionResult AddUser(UserRequest user)
         {
@@ -45,7 +44,6 @@ namespace My_Login_App.API.Controllers
             return Ok();
         }
 
-        [Authorize(Roles = "Admin")]
         [HttpGet("Get-User-By-Username/{username}")]
         public IActionResult GetUserByUsername(string username)
         {
