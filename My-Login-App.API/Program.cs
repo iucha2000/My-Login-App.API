@@ -3,7 +3,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using My_Login_App.API.Auth;
+using My_Login_App.API.Interfaces;
 using My_Login_App.API.Middlewares;
+using My_Login_App.API.Models;
+using My_Login_App.API.Packages;
 using System.Text;
 
 namespace My_Login_App.API
@@ -22,6 +25,8 @@ namespace My_Login_App.API
             builder.Services.AddSwaggerGen();
 
             builder.Services.AddScoped<IJwtManager, JwtManager>();
+            builder.Services.AddScoped<IPKG_BASE<CardRequest,CardResponse>,PKG_CARDS>();
+            builder.Services.AddScoped<IPKG_BASE<UserRequest,UserResponse>,PKG_USERS>();
 
             builder.Services.AddCors(options =>
             {

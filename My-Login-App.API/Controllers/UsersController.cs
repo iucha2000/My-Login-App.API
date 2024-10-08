@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using My_Login_App.API.Interfaces;
 using My_Login_App.API.Models;
 using My_Login_App.API.Packages;
 
@@ -9,22 +11,57 @@ namespace My_Login_App.API.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        [HttpPost("Add-User")]
-        public IActionResult AddUser(User user)
+        private readonly IPKG_BASE<UserRequest, UserResponse> _usersRepo;
+
+        public UsersController(IPKG_BASE<UserRequest, UserResponse> usersRepo)
         {
-            PKG_USERS userPKG = new PKG_USERS();
-            userPKG.AddUser(user);
+            _usersRepo = usersRepo;
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost("Add-User")]
+        public IActionResult AddUser(UserRequest user)
+        {
+            _usersRepo.AddEntity(user);
 
             return Ok();
         }
 
+        [Authorize(Roles = "Admin")]
+        [HttpPut("Edit-User/{id}")]
+        public IActionResult EditUser(int id, UserRequest user)
+        {
+            _usersRepo.UpdateEntity(id, user);
+
+            return Ok();
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpDelete("Delete-User/{id}")]
+        public IActionResult DeleteUser(int id)
+        {
+            _usersRepo.DeleteEntity(id);
+
+            return Ok();
+        }
+
+        [Authorize(Roles = "Admin")]
         [HttpGet("Get-User-By-Username/{username}")]
         public IActionResult GetUserByUsername(string username)
         {
-            PKG_USERS userPKG = new PKG_USERS();
-            User user = userPKG.GetUser(username);
-        
+            UserResponse user = _usersRepo.GetEntityByProperty(username);
+
             return Ok(user);
         }
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet("Get-All-Users")]
+        public IActionResult GetCards()
+        {
+            List<UserResponse> users = _usersRepo.GetAllEntities();
+
+            return Ok(users);
+        }
+
     }
 }

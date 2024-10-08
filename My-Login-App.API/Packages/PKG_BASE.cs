@@ -1,17 +1,17 @@
 ﻿namespace My_Login_App.API.Packages
 {
-    internal class PKG_BASE
+    public class PKG_BASE
     {
-        string connString;
+        private IConfiguration _configuration;
 
-        public PKG_BASE()
+        public PKG_BASE(IConfiguration configuration)
         {
-            connString = @"Data Source=(DESCRIPTION =  (ADDRESS = (PROTOCOL = TCP)(HOST = 172.20.0.188)(PORT = 1521)) (CONNECT_DATA =   (SERVER = DEDICATED) (SID = orcl)));User Id=olerning;Password=olerning";
+            _configuration = configuration;
         }
 
         protected string ConnStr
         {
-            get { return connString; }
+            get { return this._configuration.GetConnectionString("OracleConnection"); }
         }
     }
 }

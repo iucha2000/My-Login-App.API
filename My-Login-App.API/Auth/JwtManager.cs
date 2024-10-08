@@ -8,7 +8,7 @@ namespace My_Login_App.API.Auth
 {
     public interface IJwtManager
     {
-        Token GetToken(User user);
+        Token GetToken(UserResponse user);
     }
 
     public class JwtManager : IJwtManager
@@ -20,7 +20,7 @@ namespace My_Login_App.API.Auth
             _configuration = configuration;
         }
 
-        public Token GetToken(User user)
+        public Token GetToken(UserResponse user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var tokenKey = Encoding.UTF8.GetBytes(_configuration["JWT:Key"]);

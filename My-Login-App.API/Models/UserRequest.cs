@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace My_Login_App.API.Models
 {
-    public class User
+    public class UserRequest
     {
         private Role _role;
 

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using My_Login_App.API.Interfaces;
 using My_Login_App.API.Models;
 using My_Login_App.API.Packages;
 
@@ -10,12 +11,18 @@ namespace My_Login_App.API.Controllers
     [ApiController]
     public class CardsController : ControllerBase
     {
+        private readonly IPKG_BASE<CardRequest,CardResponse> _cardsRepo;
+
+        public CardsController(IPKG_BASE<CardRequest, CardResponse> cardsRepo)
+        {
+            _cardsRepo = cardsRepo;
+        }
+
         [Authorize]
         [HttpPost("Add-Card")]
         public IActionResult AddCard(CardRequest card)
         {
-            PKG_CARDS cardPKG = new PKG_CARDS();
-            cardPKG.add_card(card);
+            _cardsRepo.AddEntity(card);
 
             return Ok();
         }
@@ -24,8 +31,7 @@ namespace My_Login_App.API.Controllers
         [HttpPut("Edit-Card/{id}")]
         public IActionResult EditCard(int id, CardRequest card)
         {
-            PKG_CARDS cardPKG = new PKG_CARDS();
-            cardPKG.edit_card(id, card);
+            _cardsRepo.UpdateEntity(id, card);
 
             return Ok();
         }
@@ -34,30 +40,27 @@ namespace My_Login_App.API.Controllers
         [HttpDelete("Delete-Card/{id}")]
         public IActionResult DeleteCard(int id)
         {
-            PKG_CARDS cardPKG = new PKG_CARDS();
-            cardPKG.delete_card(id);
+            _cardsRepo.DeleteEntity(id);
 
             return Ok();
-        }
-
-        [Authorize]
-        [HttpGet("Get-All-Cards")]
-        public IActionResult GetCards()
-        {
-            PKG_CARDS cardPKG = new PKG_CARDS();
-            List<CardResponse> cards = cardPKG.get_all_cards();
-
-            return Ok(cards);
         }
 
         [Authorize]
         [HttpGet("Get-Card-By-Id/{id}")]
         public IActionResult GetCardById(int id)
         {
-            PKG_CARDS cardPKG = new PKG_CARDS();
-            CardResponse card = cardPKG.get_card_by_id(id);
+            CardResponse card = _cardsRepo.GetEntity(id);
 
             return Ok(card);
+        }
+
+        [Authorize]
+        [HttpGet("Get-All-Cards")]
+        public IActionResult GetCards()
+        {
+            List<CardResponse> cards = _cardsRepo.GetAllEntities();
+
+            return Ok(cards);
         }
 
     }

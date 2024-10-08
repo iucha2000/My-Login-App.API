@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using My_Login_App.API.Auth;
+using My_Login_App.API.Interfaces;
 using My_Login_App.API.Models;
 using My_Login_App.API.Packages;
 
@@ -10,21 +11,22 @@ namespace My_Login_App.API.Controllers
     [ApiController]
     public class AuthenticationController : ControllerBase
     {
-        private readonly IJwtManager jwtManager;
+        private readonly IJwtManager _jwtManager;
+        private readonly IPKG_BASE<UserRequest,UserResponse> _usersRepo;
 
-        public AuthenticationController(IJwtManager jwtManager)
+        public AuthenticationController(IJwtManager jwtManager, IPKG_BASE<UserRequest, UserResponse> usersRepo)
         {
-            this.jwtManager = jwtManager;
+            _jwtManager = jwtManager;
+            _usersRepo = usersRepo;
         }
 
         [HttpPost]
         public IActionResult Authenticate(Login user)
         {
-            PKG_USERS userPKG = new PKG_USERS();
-            User existingUser = userPKG.GetUser(user.Username);
+            UserResponse existingUser = _usersRepo.GetEntityByProperty(user.Username);
             if (existingUser != null && existingUser.Password == user.Password)
             {
-                var token = jwtManager.GetToken(existingUser);
+                var token = _jwtManager.GetToken(existingUser);
                 return Ok(token);
             }
             return Unauthorized(new { message = "Invalid credentials" });
